@@ -1,0 +1,13 @@
+fastapi[all]
+requests
+sqlalchemy
+alembic
+asyncpg
+pydantic-settings
+pydantic
+httpx
+python-jose
+bcrypt
+passlib
+sqlmodel
+mysql-connector-python
