@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
-from datetime import date
+from datetime import date, datetime 
 
 class UserRegistrationScheme(BaseModel):
     first_name: str = Field(..., description="Имя пользователя")
@@ -12,7 +12,6 @@ class UserRegistrationScheme(BaseModel):
     about: str = Field(..., max_length=200, description="О себе")
     password: str = Field(..., min_length=8, max_length=48, description="Введите пароль")
     email: EmailStr = Field(..., description="Электронная почта")
-
 
     @field_validator("gender")
     @classmethod
@@ -30,9 +29,11 @@ class UserRegistrationScheme(BaseModel):
 
 
 class UserConfirmEmailScheme(BaseModel):
-    confirm_code: int = Field(..., min_length=6, max_length=6, description="Введите код для подтверждения")
+    confirm_code: str = Field(..., min_length=6, max_length=6, description="Введите код для подтверждения")
 
 class UserLoginScheme(BaseModel):
     email: EmailStr = Field(..., description="Электронная почта")
     password: str = Field(..., min_length=8, max_length=48, description="Введите пароль")
 
+class UserSearch(BaseModel):
+    profile_id: str

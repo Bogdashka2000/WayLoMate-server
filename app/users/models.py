@@ -18,6 +18,8 @@ class User(Base):
     birthday: Mapped[date]
     gender: Column(Enum(Gender))
     about: Mapped[str] = mapped_column(Text)
+    header_image_url: Mapped[str]
+    avatar_image_url: Mapped[str]
 
     user_hobbies = relationship("UserHobby", back_populates="user", cascade="all, delete-orphan")
     user_travel_goals = relationship("UserTravelGoal", back_populates="user", cascade="all, delete-orphan")
