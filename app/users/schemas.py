@@ -27,6 +27,17 @@ class UserRegistrationScheme(BaseModel):
             raise ValueError('Будущее время при рождении ')
         return value
 
+    def user_model_dump(self):
+        return {
+            "first_name" : self.first_name,
+            "last_name" : self.last_name,
+            "birthday" :  self.birthday,
+            "gender" : self.gender,
+            "about" : self.about,
+            "password" : self.password,
+            "email" : self.email
+        }
+
 
 class UserConfirmEmailScheme(BaseModel):
     confirm_code: str = Field(..., min_length=6, max_length=6, description="Введите код для подтверждения")

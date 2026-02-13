@@ -1,32 +1,37 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from app.database import Base, int_pk
+from sqlalchemy import Integer, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.database import Base
+from app.users.models import User
+from app.hobbies.models import Hobby
+from app.languages.models import Language
+from app.travel_goals.models import TravelGoal
 
 class UserHobby(Base):
-
     __tablename__ = 'user_hobby'
 
-    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    hobby_id = Column(Integer, ForeignKey('hobby.id'), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
+    hobby_id: Mapped[int] = mapped_column(ForeignKey('hobby.id'), primary_key=True)
 
-    user = relationship("User", back_populates="user_hobbies")
-    hobby = relationship("Hobby", back_populates="user_hobbies")
+    user: Mapped["User"] = relationship(back_populates="user_hobbies")
+    hobby: Mapped["Hobby"] = relationship(back_populates="user_hobbies")
+
 
 class UserTravelGoal(Base):
-
     __tablename__ = 'user_travel_goal'
 
-    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    user_goal_id = Column(Integer, ForeignKey('travel_goal.id'), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
+    travel_goal_id: Mapped[int] = mapped_column(ForeignKey('travel_goal.id'), primary_key=True) 
 
-    user = relationship("User", back_populates="user_travel_goal")
-    travel_goal = relationship("", back_populates="user_travel_goal")
+    user: Mapped["User"] = relationship(back_populates="user_travel_goals")
+    travel_goal: Mapped["TravelGoal"] = relationship(back_populates="user_travel_goals")
+
 
 class UserLanguage(Base):
-
     __tablename__ = 'user_language'
 
-    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-    language_id = Column(Integer, ForeignKey('language.id'), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
+    language_id: Mapped[int] = mapped_column(ForeignKey('language.id'), primary_key=True)
 
-    user = relationship("User", back_populates="user_language")
-    language = relationship("Language", back_populates="user_language")
+    user: Mapped["User"] = relationship(back_populates="user_languages")
+    language: Mapped["Language"] = relationship(back_populates="user_languages")

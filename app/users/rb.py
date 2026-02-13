@@ -1,6 +1,6 @@
 from datetime import date
 
-class RBUser:
+class RBUserFilter:
     def __init__ (
         self,
         user_id: int | None = None,

@@ -1,5 +1,6 @@
-import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional
+import os
 
 class Setup(BaseSettings):
     DB_HOST: str
@@ -11,17 +12,18 @@ class Setup(BaseSettings):
     ALGORITHM: str
 
     model_config = SettingsConfigDict(
-        env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
+        env_file=".env",          # ← относительно места запуска сервера
+        env_file_encoding="utf-8",
+        extra="ignore"
     )
-
 
 setup = Setup()
 
 
 def get_db_url():
-    return (f"mysql+mysqlconnector://{settings.DB_USER}:{settings.DB_PASSWORD}@"
-            f"{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}")
+    return (f"mysql+aiomysql://{setup.DB_USER}:{setup.DB_PASSWORD}@"
+            f"{setup.DB_HOST}:{setup.DB_PORT}/{setup.DB_NAME}")
 
 
 def get_auth_data():
-    return {"secret_key": settings.SECRET_KEY, "algorithm": settings.ALGORITHM}
+    return {"secret_key": setup.SECRET_KEY, "algorithm": setup.ALGORITHM}
