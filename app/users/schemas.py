@@ -26,17 +26,15 @@ class UserRegistrationScheme(BaseModel):
         if value and value >= datetime.now().date():
             raise ValueError('Будущее время при рождении ')
         return value
+    
+    def user_hobbies_model_dump(self):
+        return self.hobbies
 
-    def user_model_dump(self):
-        return {
-            "first_name" : self.first_name,
-            "last_name" : self.last_name,
-            "birthday" :  self.birthday,
-            "gender" : self.gender,
-            "about" : self.about,
-            "password" : self.password,
-            "email" : self.email
-        }
+    def user_goals_model_dump(self):
+        return self.goals
+    
+    def user_languages_model_dump(self):
+        return self.languages
 
 
 class UserConfirmEmailScheme(BaseModel):

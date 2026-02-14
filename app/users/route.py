@@ -26,6 +26,7 @@ async def login_user(user: UserLoginScheme) -> dict:
 
 @router.post("/registration")
 async def register_user(user: UserRegistrationScheme) -> dict:
+    
     await UserService.addNewUser(user)
     return {'result': 'ok'}
 

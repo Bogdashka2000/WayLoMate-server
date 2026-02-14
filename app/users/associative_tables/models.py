@@ -11,7 +11,7 @@ class UserHobby(Base):
     __tablename__ = 'user_hobby'
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
-    hobby_id: Mapped[int] = mapped_column(ForeignKey('hobby.id'), primary_key=True)
+    hobby_id: Mapped[int] = mapped_column(ForeignKey('hobbies.id'), primary_key=True)
 
     user: Mapped["User"] = relationship(back_populates="user_hobbies")
     hobby: Mapped["Hobby"] = relationship(back_populates="user_hobbies")
@@ -21,7 +21,7 @@ class UserTravelGoal(Base):
     __tablename__ = 'user_travel_goal'
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
-    travel_goal_id: Mapped[int] = mapped_column(ForeignKey('travel_goal.id'), primary_key=True) 
+    travel_goal_id: Mapped[int] = mapped_column(ForeignKey('travel_goals.id'), primary_key=True) 
 
     user: Mapped["User"] = relationship(back_populates="user_travel_goals")
     travel_goal: Mapped["TravelGoal"] = relationship(back_populates="user_travel_goals")
@@ -31,7 +31,7 @@ class UserLanguage(Base):
     __tablename__ = 'user_language'
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
-    language_id: Mapped[int] = mapped_column(ForeignKey('language.id'), primary_key=True)
+    language_id: Mapped[int] = mapped_column(ForeignKey('languages.id'), primary_key=True)
 
     user: Mapped["User"] = relationship(back_populates="user_languages")
     language: Mapped["Language"] = relationship(back_populates="user_languages")
