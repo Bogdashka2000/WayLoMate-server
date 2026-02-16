@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Response, Depends, UploadFile, File
+from fastapi import APIRouter, Response, Depends, UploadFile, File, status, HTTPException
 #from app.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordException
 from app.users.schemas import UserRegistrationScheme, UserSearch, UserLoginScheme
 from typing import List
 from app.users.rb import RBUserFilter
 from app.users.service import UserService
-
+from app.users.auth import get_hash_password
 router = APIRouter(prefix='/user', tags=['User Preference'])
 # UploadFile = File(..., description="Аватарки и шапка профиля")
 
@@ -26,9 +26,12 @@ async def login_user(user: UserLoginScheme) -> dict:
 
 @router.post("/registration")
 async def register_user(user: UserRegistrationScheme) -> dict:
-    
-    await UserService.addNewUser(user)
-    return {'result': 'ok'}
+    exist_user = await UserService.find_user_one_or_none(email = user.email)
+    if exist_user:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='Пользователь уже существует')
+    user.password = get_hash_password(user.password)
+    added_user = await UserService.addNewUser(user)
+    return {'result': 'Пользователь зарегистрирован'} 
 
 @router.put('/change_profile_avatar')
 async def change_avatar(file: UploadFile = File(...)) -> dict:

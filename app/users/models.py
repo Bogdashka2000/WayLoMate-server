@@ -21,8 +21,8 @@ class User(Base):
     gender: Mapped[Gender] = mapped_column(SQLEnum(Gender)) 
     about: Mapped[str] = mapped_column(Text)
     header_image_url: Mapped[str] = mapped_column(String(255), default="none")
-    avatar_image_url: Mapped[str] = mapped_column(String(255), default="none")
-    password: Mapped[str] = mapped_column(String(48), nullable=False)
+    avatar_image_url: Mapped[str] = mapped_column(String(255),default="none")
+    password: Mapped[str] = mapped_column(String(1024), nullable=False)
     email: Mapped[str] = mapped_column(String(20), nullable=False)
 
     user_hobbies = relationship("UserHobby", back_populates="user", cascade="all, delete-orphan")

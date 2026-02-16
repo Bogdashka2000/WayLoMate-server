@@ -11,6 +11,15 @@ from sqlalchemy.exc import SQLAlchemyError
 class UserService:
 
     @classmethod
+    async def find_user_one_or_none(cls, **fltr):
+        async with async_session_maker() as session:
+            check = await session.execute(
+                select(User).filter_by(**fltr)
+            )
+            return check.scalar_one_or_none()
+
+
+    @classmethod
     async def addNewUser(cls, user_data: UserRegistrationScheme):
         async with async_session_maker() as session:
             user = User(
@@ -55,7 +64,7 @@ class UserService:
 
                 for language in existing_languages:
                     user_lang = UserLanguage(user_id = user.id, language_id=language.id)
-                    session.add(user_goal)
+                    session.add(user_lang)
 
             await session.commit()
             await session.refresh(user)

@@ -6,9 +6,10 @@ asyncpg
 pydantic-settings
 pydantic
 httpx
-python-jose
-bcrypt
-passlib
 sqlmodel
 mysql-connector-python
 aiomysql
+
+python-jose
+bcrypt==4.0.1
+passlib[bcrypt]
