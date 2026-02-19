@@ -10,6 +10,10 @@ class Setup(BaseSettings):
     DB_PASSWORD: str
     SECRET_KEY: str
     ALGORITHM: str
+    STATIC_DIR_AVATAR: str
+    STATIC_DIR_HEADER: str
+    STATIC_DIR_POST_PICTURES: str
+    
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -27,3 +31,10 @@ def get_db_url():
 
 def get_auth_data():
     return {"secret_key": setup.SECRET_KEY, "algorithm": setup.ALGORITHM}
+
+def get_static_path():
+      return {
+            "static_dir_avatar": setup.STATIC_DIR_AVATAR,
+            "static_dir_header": setup.STATIC_DIR_HEADER,
+            "static_dir_post_pictures": setup.STATIC_DIR_POST_PICTURES
+             }

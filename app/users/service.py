@@ -3,7 +3,7 @@ from app.users.models import User
 from app.languages.models import Language
 from app.hobbies.models import Hobby
 from app.travel_goals.models import TravelGoal
-from app.users.schemas import UserRegistrationScheme
+from app.users.schemas import UserRegistrationScheme, UserAvaibleInfo
 from app.users.associative_tables.models import UserHobby, UserTravelGoal, UserLanguage
 from app.database import async_session_maker
 from sqlalchemy.exc import SQLAlchemyError
@@ -18,9 +18,22 @@ class UserService:
             )
             return check.scalar_one_or_none()
 
+    
 
     @classmethod
-    async def addNewUser(cls, user_data: UserRegistrationScheme):
+    async def find_all_validation_users(cls, **fltr):
+        async with async_session_maker() as session:
+            check = await session.execute(
+                select(User).filter_by(**fltr)
+            )
+            user = check.scalars().all()
+            return [UserAvaibleInfo.model_validate(u) for u in user]
+
+
+
+
+    @classmethod
+    async def add_new_user(cls, user_data: UserRegistrationScheme):
         async with async_session_maker() as session:
             user = User(
                 **user_data.model_dump(
