@@ -15,8 +15,10 @@ class UserImageService:
         file_ext = os.path.splitext(file.filename)[1].lower()
         data = get_static_path()
 
-        file_path = os.path.join(data[env_static_file_path], f'{uuid.uuid4()}{file_ext}')
+        file_name = f'{uuid.uuid4()}{file_ext}'
+
+        file_path = os.path.join(data[env_static_file_path], file_name)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        return file_path
+        return file_name

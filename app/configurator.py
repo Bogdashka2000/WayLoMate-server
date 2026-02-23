@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 import os
 
+
 class Setup(BaseSettings):
     DB_HOST: str
     DB_PORT: int
@@ -34,7 +35,11 @@ def get_auth_data():
 
 def get_static_path():
       return {
-            "static_dir_avatar": setup.STATIC_DIR_AVATAR,
-            "static_dir_header": setup.STATIC_DIR_HEADER,
-            "static_dir_post_pictures": setup.STATIC_DIR_POST_PICTURES
+            "static_dir_avatar": f"app/{setup.STATIC_DIR_AVATAR}",
+            "static_dir_header": f"app/{setup.STATIC_DIR_HEADER}",
+            "static_dir_post_pictures": f"app/{setup.STATIC_DIR_POST_PICTURES}",
+
+            "static_dir_avatar_for_link": setup.STATIC_DIR_AVATAR,
+            "static_dir_header_for_link": setup.STATIC_DIR_HEADER,
+            "static_dir_post_pictures_for link": setup.STATIC_DIR_POST_PICTURES,
              }

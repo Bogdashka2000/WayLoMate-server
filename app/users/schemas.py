@@ -51,15 +51,35 @@ class UserSearch(BaseModel):
 class UserAvaibleInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
+    id: int
     first_name: str = Field(..., description="Имя пользователя")
     last_name: str = Field(..., description="Фамилия пользователя")
     birthday: date = Field(..., description="Дата рождения")
     gender: str = Field(..., description="Гендер: 'male' или 'female'")
     avatar_image_url: str = Field(..., description="Аватарка пользователя")
     header_image_url: str = Field(..., description="Шапка пользователя")
-    # hobbies: list[int] = Field(..., description="Введите все id хобби")
-    # goals: list[int] = Field(..., description="Введите все id целей")
-    # languages: list[int] = Field(..., description="Введите все id языков")
+    # hobbies: list[str] = Field(..., description="Введите все id хобби")
+    # goals: list[str] = Field(..., description="Введите все id целей")
+    # languages: list[str] = Field(..., description="Введите все id языков")
     about: str = Field(..., max_length=200, description="О себе")
     # password: str = Field(..., min_length=8, max_length=48, description="Введите пароль")
     # email: EmailStr = Field(..., description="Электронная почта")
+
+class HobbyInfo(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    # id: int
+    hobby_name: str = Field(..., description="Хобби")
+
+class GoalInfo(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    # id: int
+    travel_goal_name: str = Field(..., description="Цели")
+
+class LanguageInfo(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    # id: int
+    language_name: str = Field(..., description="Язык, на котором пользователь говорит")
+

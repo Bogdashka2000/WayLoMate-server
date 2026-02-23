@@ -9,7 +9,7 @@ class RBUserFilter(BaseModel):
     last_name: Optional[str] = Field(default=None)
     birthday: Optional[date] = Field(default=None)
     gender: Optional[str] = Field(default=None)
-
+    about: Optional[str] = Field(default=None)
 
     def to_dict(self) -> dict:
         return self.model_dump(exclude_none=True)

@@ -1,32 +1,48 @@
 from fastapi import APIRouter, Response, Depends, UploadFile, File, status, HTTPException
 #from app.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordException
-from app.users.schemas import UserRegistrationScheme, UserSearch, UserLoginScheme, UserAvaibleInfo
+from app.users.schemas import UserRegistrationScheme, UserSearch, UserLoginScheme, UserAvaibleInfo, HobbyInfo, GoalInfo, LanguageInfo
 from typing import List
 from app.users.rb import RBUserFilter
 from app.users.service import UserService
 from app.users.auth import get_hash_password, verify_password, create_token, get_user_by_token
 from app.users.image_service import UserImageService
+
 router = APIRouter(prefix='/user', tags=['User Preference'])
 # UploadFile = File(..., description="Аватарки и шапка профиля")
 
-@router.get("/")
+@router.get("/", response_model=List[UserAvaibleInfo])
 async def all_users() -> UserAvaibleInfo | dict:
     users = await UserService.find_all_validation_users()
-    return {"result" : users}
+    return users
 
-@router.get("/filter")
+@router.get("/filter", response_model=List[UserAvaibleInfo])
 async def filtered_users(filters: RBUserFilter = Depends()):
     user = await UserService.find_all_validation_users(**filters.model_dump(exclude_none=True))
     return user
 
-@router.get("/im")
+@router.get("/im", response_model=UserAvaibleInfo)
 async def authorizated_user(user: User = Depends(get_user_by_token)):
-    return user
+    return user[0]
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=UserAvaibleInfo)
 async def current_users(id: int) -> UserAvaibleInfo | dict:
-    users = await UserService.find_all_validation_users(id=id)
-    return {"result" : users}
+    user = await UserService.find_all_validation_users(id=id)
+    return user[0]
+
+@router.get("/{id}/hobbies", response_model=List[HobbyInfo])
+async def users_hobbies(id: int):
+    hobby = await UserService.find_hobbies_by_user_id(id)
+    return hobby
+
+@router.get("/{id}/goals", response_model=List[GoalInfo])
+async def users_goals(id: int):
+    goals = await UserService.find_goals_by_user_id(id)
+    return goals
+
+@router.get("/{id}/languages", response_model=List[LanguageInfo])
+async def current_users(id: int):
+    languages = await UserService.find_languages_by_user_id(id)
+    return languages
     
 @router.post("/login")
 async def login_user(response: Response, user: UserLoginScheme) -> dict:
@@ -44,7 +60,6 @@ async def login_user(response: Response, user: UserLoginScheme) -> dict:
         "message": "Пользователь авторизован"
     }
      
-
 @router.post("/registration")
 async def register_user(user: UserRegistrationScheme) -> dict:
     exist_user = await UserService.find_user_one_or_none(email = user.email)
@@ -54,23 +69,33 @@ async def register_user(user: UserRegistrationScheme) -> dict:
     added_user = await UserService.add_new_user(user)
     return {'result': 'Пользователь зарегистрирован'} 
 
-@router.put('/change_profile_avatar')
+@router.patch('/change_profile_avatar')
 async def change_avatar(user: User = Depends(get_user_by_token), 
-                        file: UploadFile = File(..., description="Иземенение аватара пользователя")) -> dict: 
-    image_link = await UserImageService.save_image(file, 'static_dir_avatar')
+                        file: UploadFile = File(..., description="Иземенение аватара пользователя")) -> UserAvaibleInfo | dict: 
+    image_name = await UserImageService.save_image(file, 'static_dir_avatar')
+    new_user = await UserService.change_user_avatar(user[0], image_name)
     
-    
-    return {'result': 'ok'}
+    return new_user
     
 
-@router.put('/change_profile_header')
-async def change_header(file: UploadFile = File(..., description="Иземенение шапки пользователя")) -> dict:
-    return await {'result': 'ok'} 
+@router.patch('/change_profile_header')
+async def change_header(user: User = Depends(get_user_by_token), 
+                        file: UploadFile = File(..., description="Иземенение шапки пользователя")) -> UserAvaibleInfo | dict: 
+    image_name = await UserImageService.save_image(file, 'static_dir_header')
+    new_user = await UserService.change_user_header(user[0], image_name)
+    return new_user 
 
 @router.patch('/change_profile')
-async def change_profile(user: UserRegistrationScheme) -> dict:
-    return await {'result': 'ok'} 
+async def change_profile(user: User = Depends(get_user_by_token), filters: RBUserFilter = Depends()) -> dict:
+    changed_user = await UserService.change_user_info(user[0], **filters.model_dump(exclude_none=True))
+    return {'result': 'Данные изменены'} 
+
+@router.delete('/logout')
+async def logout_user(response: Response) -> dict:
+    response.delete_cookie(key="user_token")
+    return { 'ok': True, "message": "Пользователь вышел" }
 
 @router.delete('/remove_profile')
-async def remove_profile(user: UserSearch) -> dict:
-    return await {'result': 'ok'} 
+async def remove_profile(user: User = Depends(get_user_by_token)) -> dict:
+    removed_user = await UserService.remove_user(user[0])
+    return {'result': 'Пользователь удалён'} 

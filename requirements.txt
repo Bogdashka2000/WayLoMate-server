@@ -9,7 +9,7 @@ httpx
 sqlmodel
 mysql-connector-python
 aiomysql
-
+cryptography
 python-jose
 bcrypt==4.0.1
 passlib[bcrypt]
