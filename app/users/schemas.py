@@ -64,6 +64,7 @@ class UserAvaibleInfo(BaseModel):
     about: str = Field(..., max_length=200, description="О себе")
     # password: str = Field(..., min_length=8, max_length=48, description="Введите пароль")
     # email: EmailStr = Field(..., description="Электронная почта")
+    is_admin: bool = Field(..., description="Права администратора")
 
 class HobbyInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)

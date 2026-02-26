@@ -30,35 +30,28 @@ async def current_users(id: int) -> UserAvaibleInfo | dict:
     return user[0]
 
 @router.get("/{id}/hobbies", response_model=List[HobbyInfo])
-async def users_hobbies(id: int):
+async def users_hobbies(id: int) -> List[HobbyInfo]:
     hobby = await UserService.find_hobbies_by_user_id(id)
     return hobby
 
 @router.get("/{id}/goals", response_model=List[GoalInfo])
-async def users_goals(id: int):
+async def user_goals(id: int) -> List[GoalInfo]:
     goals = await UserService.find_goals_by_user_id(id)
     return goals
 
 @router.get("/{id}/languages", response_model=List[LanguageInfo])
-async def current_users(id: int):
+async def user_languages(id: int) -> List[LanguageInfo]:
     languages = await UserService.find_languages_by_user_id(id)
     return languages
     
 @router.post("/login")
 async def login_user(response: Response, user: UserLoginScheme) -> dict:
-
     user_in_database = await UserService.find_user_one_or_none(email=user.email)
-
     if not user_in_database or verify_password(user.password,  user_in_database.password) is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Неверная почта или пароль')
     token = create_token({"sub": str(user_in_database.id)})
     response.set_cookie(key="user_token", value=token, httponly=True)
-    return {
-        'ok': True, 
-        'user_token': token,
-        'refresh_token': None,
-        "message": "Пользователь авторизован"
-    }
+    return { 'ok': True, 'user_token': token, 'refresh_token': None, "message": "Пользователь авторизован" }
      
 @router.post("/registration")
 async def register_user(user: UserRegistrationScheme) -> dict:
@@ -74,10 +67,8 @@ async def change_avatar(user: User = Depends(get_user_by_token),
                         file: UploadFile = File(..., description="Иземенение аватара пользователя")) -> UserAvaibleInfo | dict: 
     image_name = await UserImageService.save_image(file, 'static_dir_avatar')
     new_user = await UserService.change_user_avatar(user[0], image_name)
-    
     return new_user
     
-
 @router.patch('/change_profile_header')
 async def change_header(user: User = Depends(get_user_by_token), 
                         file: UploadFile = File(..., description="Иземенение шапки пользователя")) -> UserAvaibleInfo | dict: 

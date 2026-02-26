@@ -3,6 +3,10 @@ import os
 from starlette.requests import Request
 from starlette.responses import RedirectResponse, FileResponse
 from app.users.route import router as users_route
+from app.hobbies.route import router as hobbies_route
+from app.languages.route import router as languages_route
+from app.travel_goals.route import router as goals_route
+
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
@@ -25,3 +29,6 @@ def mainpage():
     return FileResponse("favicon.ico")
 
 app.include_router(users_route)
+app.include_router(hobbies_route)
+app.include_router(languages_route)
+app.include_router(goals_route)

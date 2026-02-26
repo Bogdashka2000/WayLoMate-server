@@ -1,4 +1,4 @@
-from sqlalchemy import Text, String
+from sqlalchemy import Text, String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Enum as SQLEnum
 from app.database import Base, int_pk
@@ -23,7 +23,8 @@ class User(Base):
     header_image_url: Mapped[str] = mapped_column(String(255), default="none")
     avatar_image_url: Mapped[str] = mapped_column(String(255),default="none")
     password: Mapped[str] = mapped_column(String(1024), nullable=False)
-    email: Mapped[str] = mapped_column(String(20), nullable=False)
+    email: Mapped[str] = mapped_column(String(100), nullable=False)
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
 
     user_hobbies = relationship("UserHobby", back_populates="user", cascade="all, delete-orphan")
     user_travel_goals = relationship("UserTravelGoal", back_populates="user", cascade="all, delete-orphan")

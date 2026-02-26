@@ -1,1 +1,1 @@
-# WayLoMate-sever
+# WayLoMate-server

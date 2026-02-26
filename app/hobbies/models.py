@@ -9,4 +9,4 @@ class Hobby(Base):
     id: Mapped[int_pk]
     hobby_name: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
 
-    user_hobbies = relationship("UserHobby", back_populates="hobby")
+    user_hobbies = relationship("UserHobby", back_populates="hobby", cascade="all, delete-orphan")

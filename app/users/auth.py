@@ -48,3 +48,28 @@ async def get_user_by_token(token: srt = Depends(get_token)):
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Пользователя не существует')
     return user
+
+async def get_admin_by_token(token: srt = Depends(get_token)):
+    try:
+        auth_data = get_auth_data()
+        payload = jwt.decode(token, auth_data['secret_key'], algorithms=[auth_data["algorithm"]])
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Неправильный токен')
+
+    expire = payload.get('exp')
+    expire_time = datetime.fromtimestamp(int(expire), tz=timezone.utc)
+    if (not expire) or (expire_time < datetime.now(timezone.utc)):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Токен истек')
+
+    user_id = payload.get('sub')
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='ID отсутствует')
+    
+    user = await UserService.find_all_validation_users(id=int(user_id))
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Пользователя не существует')
+    
+    if not user[0].is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='У пользователя нет прав администратора')
+    
+    return True
