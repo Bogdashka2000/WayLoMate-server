@@ -19,6 +19,8 @@ async def create_new_hobby(hobby: AddHobby, is_admin: bool = Depends(get_admin_b
     return hobby
 
 @router.delete("/remove/{id}")
-async def remove_hobby(id: int):
+async def remove_hobby(id: int, is_admin: bool = Depends(get_admin_by_token)):
+    if not is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='У пользователя нет прав администратора')
     hobby = await HobbyService.remove_hobby(id)
     return hobby

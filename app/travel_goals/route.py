@@ -19,6 +19,8 @@ async def create_new_goal(goal: AddGoal, is_admin: bool = Depends(get_admin_by_t
     return goal
 
 @router.delete("/remove/{id}")
-async def remove_goal(id: int):
+async def remove_goal(id: int, is_admin: bool = Depends(get_admin_by_token)):
+    if not is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='У пользователя нет прав администратора')
     goal = await GoalService.remove_goal(id)
     return goal

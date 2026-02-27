@@ -19,6 +19,8 @@ async def create_new_language(language: AddLanguage, is_admin: bool = Depends(ge
     return language
 
 @router.delete("/remove/{id}")
-async def remove_language(id: int):
+async def remove_language(id: int, is_admin: bool = Depends(get_admin_by_token)):
+    if not is_admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='У пользователя нет прав администратора')
     language = await LanguageService.remove_language(id)
     return language

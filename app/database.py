@@ -12,3 +12,7 @@ int_pk = Annotated[int, mapped_column(primary_key=True)]
 
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True
+
+from app.posts.models import Post
+from app.comments.models import Comment
+from app.likes.models import Like
