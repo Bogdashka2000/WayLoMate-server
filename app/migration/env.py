@@ -15,6 +15,10 @@ from app.languages.models import Language
 from app.travel_goals.models import TravelGoal
 from app.users.associative_tables.models import UserHobby, UserTravelGoal, UserLanguage
 
+from app.posts.models import Post
+from app.comments.models import Comment
+from app.likes.models import Like
+
 from app.database import Base
 from app.configurator import get_db_url
 

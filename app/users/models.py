@@ -1,4 +1,4 @@
-from sqlalchemy import Text, String, Boolean
+from sqlalchemy import Text, String, Boolean, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Enum as SQLEnum
 from app.database import Base, int_pk
@@ -17,7 +17,7 @@ class User(Base):
     id: Mapped[int_pk]
     first_name: Mapped[str] = mapped_column(String(20), nullable=False)
     last_name: Mapped[str] = mapped_column(String(20), nullable=False)
-    birthday: Mapped[date]
+    birthday: Mapped[date] = mapped_column(Date, nullable=True) 
     gender: Mapped[Gender] = mapped_column(SQLEnum(Gender)) 
     about: Mapped[str] = mapped_column(Text)
     header_image_url: Mapped[str] = mapped_column(String(255), default="none")
@@ -29,3 +29,6 @@ class User(Base):
     user_hobbies = relationship("UserHobby", back_populates="user", cascade="all, delete-orphan")
     user_travel_goals = relationship("UserTravelGoal", back_populates="user", cascade="all, delete-orphan")
     user_languages = relationship("UserLanguage", back_populates="user", cascade="all, delete-orphan")
+    posts = relationship("Post", back_populates="user", cascade="all, delete-orphan")
+    comments = relationship("Comment", back_populates="user", cascade="all, delete-orphan")
+    likes = relationship("Like", back_populates="user", cascade="all, delete-orphan")
