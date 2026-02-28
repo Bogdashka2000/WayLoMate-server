@@ -7,18 +7,18 @@ from typing import List
 router = APIRouter(prefix='/post', tags=['Post Preference'])
 
 @router.get("/",  response_model=List[PostInfo])
-async def all_posts():
-    post_list = await PostService.all_posts()
+async def all_posts(user: user = Depends(get_user_by_token)):
+    post_list = await PostService.all_posts(user[0].id)
     return post_list
 
 @router.get("/{id}", response_model=PostInfo)
-async def post_by_id(id: int):
-    post = await PostService.session_post_by_id(id)
+async def post_by_id(id: int, user: user = Depends(get_user_by_token)):
+    post = await PostService.session_post_by_id(user[0].id, id)
     return post
 
 @router.get("/by_user/{user_id}", response_model=List[PostInfo])
-async def post_by_user_id(user_id: int):
-    posts = await PostService.post_by_user_id(user_id)
+async def post_by_user_id(user_id: int, user: user = Depends(get_user_by_token)):
+    posts = await PostService.post_by_user_id(user[0].id, user_id)
     return posts
 
 @router.post("/add", response_model=PostInfo)

@@ -3,6 +3,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from app.database import Base, int_pk
 from datetime import datetime
 from app.likes.models import Like
+from app.comments.models import Comment
+
 
 class Post(Base):
 
@@ -18,14 +20,3 @@ class Post(Base):
     comments: Mapped[list["Comment"]] = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
     likes: Mapped[list["Like"]] = relationship("Like", back_populates="post", cascade="all, delete-orphan")
     
-    like_count: Mapped[int] = column_property(
-        select(func.count("Like.id"))
-        .where("Like.post_id" == id)
-        .scalar_subquery()
-    )
-
-    comment_count: Mapped[int] = column_property(
-        select(func.count("Comment.id"))
-        .where("Comment.post_id" == id)
-        .scalar_subquery()
-    )

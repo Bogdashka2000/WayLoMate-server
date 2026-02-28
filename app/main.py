@@ -7,6 +7,8 @@ from app.hobbies.route import router as hobbies_route
 from app.languages.route import router as languages_route
 from app.travel_goals.route import router as goals_route
 from app.posts.route import router as post_router
+from app.comments.route import router as comment_route
+from app.likes.route import router as like_route
 
 from fastapi.staticfiles import StaticFiles
 
@@ -34,3 +36,5 @@ app.include_router(hobbies_route)
 app.include_router(languages_route)
 app.include_router(goals_route)
 app.include_router(post_router)
+app.include_router(comment_route)
+app.include_router(like_route)

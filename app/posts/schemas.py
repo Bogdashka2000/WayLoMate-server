@@ -11,9 +11,12 @@ class PostInfo(BaseModel):
     created_at: datetime = Field(..., description="Время создания поста")
     like_count: int = Field(..., description="Количество лайков")
     comment_count: int = Field(..., description="Количество комментариев")
+    like_count: int = 0
+    comment_count: int = 0
+    is_liked: bool = False
 
 
 class AddPost(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
-    text: str = Field(..., description="Хобби")
+    text: str = Field(..., description="Текст поста")
