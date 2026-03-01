@@ -44,7 +44,3 @@ class HobbyService:
             await session.delete(hobby)
             await session.commit()
             return {"result": "Хобби удалено"}
-
-
-        
-

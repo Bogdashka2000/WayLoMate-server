@@ -14,6 +14,7 @@ from app.hobbies.models import Hobby
 from app.languages.models import Language
 from app.travel_goals.models import TravelGoal
 from app.users.associative_tables.models import UserHobby, UserTravelGoal, UserLanguage
+from app.subscriptions.models import Subscription
 
 from app.posts.models import Post
 from app.comments.models import Comment

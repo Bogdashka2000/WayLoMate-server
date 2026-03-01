@@ -16,3 +16,4 @@ class Base(AsyncAttrs, DeclarativeBase):
 from app.posts.models import Post
 from app.comments.models import Comment
 from app.likes.models import Like
+from app.subscriptions.models import Subscription

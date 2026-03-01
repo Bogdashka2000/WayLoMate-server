@@ -9,6 +9,7 @@ from app.travel_goals.route import router as goals_route
 from app.posts.route import router as post_router
 from app.comments.route import router as comment_route
 from app.likes.route import router as like_route
+from app.subscriptions.route import router as subscription_route
 
 from fastapi.staticfiles import StaticFiles
 
@@ -38,3 +39,4 @@ app.include_router(goals_route)
 app.include_router(post_router)
 app.include_router(comment_route)
 app.include_router(like_route)
+app.include_router(subscription_route)

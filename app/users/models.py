@@ -15,8 +15,8 @@ class User(Base):
     __tablename__ = 'users'
 
     id: Mapped[int_pk]
-    first_name: Mapped[str] = mapped_column(String(20), nullable=False)
-    last_name: Mapped[str] = mapped_column(String(20), nullable=False)
+    first_name: Mapped[str] = mapped_column(String(30), nullable=False)
+    last_name: Mapped[str] = mapped_column(String(30), nullable=False)
     birthday: Mapped[date] = mapped_column(Date, nullable=True) 
     gender: Mapped[Gender] = mapped_column(SQLEnum(Gender)) 
     about: Mapped[str] = mapped_column(Text)
@@ -32,3 +32,17 @@ class User(Base):
     posts = relationship("Post", back_populates="user", cascade="all, delete-orphan")
     comments = relationship("Comment", back_populates="user", cascade="all, delete-orphan")
     likes = relationship("Like", back_populates="user", cascade="all, delete-orphan")
+
+    subscriptions_made: Mapped[list["Subscription"]] = relationship(
+        "Subscription", 
+        foreign_keys="Subscription.user_id", 
+        back_populates="user", 
+        cascade="all, delete-orphan"
+    )
+
+    subscriptions_received: Mapped[list["Subscription"]] = relationship(
+        "Subscription", 
+        foreign_keys="Subscription.subscriber_to_id", 
+        back_populates="subscribed_to", 
+        cascade="all, delete-orphan"
+    )

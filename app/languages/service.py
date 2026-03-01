@@ -45,7 +45,3 @@ class LanguageService:
             await session.delete(language)
             await session.commit()
             return {"result": "Язык удалён"}
-
-
-        
-
