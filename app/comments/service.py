@@ -40,7 +40,10 @@ class CommentService:
     @classmethod
     async def add_comment(cls, user_id: int, comment_data: AddComment):
         async with async_session_maker() as session:
-            post = await PostService.session_post_by_id(comment_data.post_id)
+            post = await PostService.session_post_by_id(
+    user_id=user_id, 
+    post_id=comment_data.post_id
+)
 
             if post is None:
                 raise HTTPException(status_code=404, detail="Пост не найден")
