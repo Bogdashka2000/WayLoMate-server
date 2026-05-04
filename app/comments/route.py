@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Response, Depends, UploadFile, File, status, HTTPException
 from app.comments.service import CommentService
+from app.users.schemas import UserAvaibleInfo
 from app.comments.schemas import CommentInfo, AddComment
 from app.users.auth import get_user_by_token
 from typing import List
@@ -22,12 +23,12 @@ async def comment_by_post_id(post_id: int):
     return comments
 
 @router.post("/add", response_model=CommentInfo)
-async def create_new_comment(comment_data: AddComment, user: user = Depends(get_user_by_token)):
+async def create_new_comment(comment_data: AddComment, user: UserAvaibleInfo = Depends(get_user_by_token)):
     comment = await CommentService.add_comment(user_id=user[0].id, comment_data=comment_data)
     return comment
 
 @router.delete("/remove/{id}")
-async def remove_post(id: int, user: user = Depends(get_user_by_token)):
+async def remove_post(id: int, user: UserAvaibleInfo = Depends(get_user_by_token)):
     comment = await PostService.remove_comment(id, user[0].id)
     return comment
 

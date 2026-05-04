@@ -28,7 +28,7 @@ def get_token(request: Request):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Токен не найден')
     return token
 
-async def get_user_by_token(token: srt = Depends(get_token)):
+async def get_user_by_token(token: str = Depends(get_token)):
     try:
         auth_data = get_auth_data()
         payload = jwt.decode(token, auth_data['secret_key'], algorithms=[auth_data["algorithm"]])
@@ -49,7 +49,7 @@ async def get_user_by_token(token: srt = Depends(get_token)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Пользователя не существует')
     return user
 
-async def get_admin_by_token(token: srt = Depends(get_token)):
+async def get_admin_by_token(token: str = Depends(get_token)):
     try:
         auth_data = get_auth_data()
         payload = jwt.decode(token, auth_data['secret_key'], algorithms=[auth_data["algorithm"]])

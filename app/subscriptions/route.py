@@ -8,7 +8,7 @@ from typing import List
 router = APIRouter(prefix='/subscription', tags=['Subscription Preference'])
 
 @router.post("/toggle",  response_model=ToggleResult)
-async def toggle_like(following: AddSub, user: user = Depends(get_user_by_token)):
+async def toggle_like(following: AddSub, user: UserAvaibleInfo = Depends(get_user_by_token)):
     toggle = await SubscriptionService.toggle_sub(follower_id = user[0].id, following_id = following.user_id)
     return toggle
 

@@ -21,7 +21,7 @@ async def filtered_users(filters: RBUserFilter = Depends()):
     return user
 
 @router.get("/im", response_model=UserAvaibleInfo)
-async def authorizated_user(user: User = Depends(get_user_by_token)):
+async def authorizated_user(user: UserAvaibleInfo = Depends(get_user_by_token)):
     return user[0]
 
 @router.get("/{id}", response_model=UserAvaibleInfo)
@@ -63,21 +63,21 @@ async def register_user(user: UserRegistrationScheme) -> dict:
     return {'result': 'Пользователь зарегистрирован'} 
 
 @router.patch('/change_profile_avatar')
-async def change_avatar(user: User = Depends(get_user_by_token), 
+async def change_avatar(user: UserAvaibleInfo = Depends(get_user_by_token), 
                         file: UploadFile = File(..., description="Иземенение аватара пользователя")) -> UserAvaibleInfo | dict: 
     image_name = await UserImageService.save_image(file, 'static_dir_avatar')
     new_user = await UserService.change_user_avatar(user[0], image_name)
     return new_user
     
 @router.patch('/change_profile_header')
-async def change_header(user: User = Depends(get_user_by_token), 
+async def change_header(user: UserAvaibleInfo = Depends(get_user_by_token), 
                         file: UploadFile = File(..., description="Иземенение шапки пользователя")) -> UserAvaibleInfo | dict: 
     image_name = await UserImageService.save_image(file, 'static_dir_header')
     new_user = await UserService.change_user_header(user[0], image_name)
     return new_user 
 
 @router.patch('/change_profile')
-async def change_profile(user: User = Depends(get_user_by_token), filters: RBUserFilter = Depends()) -> dict:
+async def change_profile(user: UserAvaibleInfo = Depends(get_user_by_token), filters: RBUserFilter = Depends()) -> dict:
     changed_user = await UserService.change_user_info(user[0], **filters.model_dump(exclude_none=True))
     return {'result': 'Данные изменены'} 
 
@@ -87,6 +87,6 @@ async def logout_user(response: Response) -> dict:
     return { 'ok': True, "message": "Пользователь вышел" }
 
 @router.delete('/remove_profile')
-async def remove_profile(user: User = Depends(get_user_by_token)) -> dict:
+async def remove_profile(user: UserAvaibleInfo = Depends(get_user_by_token)) -> dict:
     removed_user = await UserService.remove_user(user[0])
     return {'result': 'Пользователь удалён'} 
