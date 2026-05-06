@@ -6,17 +6,15 @@ from app.likes.models import Like
 from app.comments.models import Comment
 
 
-class Post(Base):
+class News(Base):
 
-    __tablename__ = 'posts'
+    __tablename__ = 'news'
 
     id: Mapped[int_pk]
-    text: Mapped[str] = mapped_column(String(1000), nullable=False)
-    image_url: Mapped[str] = mapped_column(String(255), default="none")
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    text: Mapped[str] = mapped_column(String(2000), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
 
-    user = relationship("User", back_populates="posts")
-    comments: Mapped[list["Comment"]] = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
-    likes: Mapped[list["Like"]] = relationship("Like", back_populates="post", cascade="all, delete-orphan")
+    user = relationship("User", back_populates="news")
     

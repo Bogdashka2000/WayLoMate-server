@@ -10,6 +10,8 @@ from app.posts.route import router as post_router
 from app.comments.route import router as comment_route
 from app.likes.route import router as like_route
 from app.subscriptions.route import router as subscription_route
+from app.chat.route import router as chat_route
+from app.news.route import router as news_route
 
 from fastapi.staticfiles import StaticFiles
 
@@ -40,3 +42,5 @@ app.include_router(post_router)
 app.include_router(comment_route)
 app.include_router(like_route)
 app.include_router(subscription_route)
+app.include_router(chat_route)
+app.include_router(news_route)
