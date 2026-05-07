@@ -12,6 +12,7 @@ from app.likes.route import router as like_route
 from app.subscriptions.route import router as subscription_route
 from app.chat.route import router as chat_route
 from app.news.route import router as news_route
+from app.admin.route import router as admin_route
 
 from fastapi.staticfiles import StaticFiles
 
@@ -44,3 +45,4 @@ app.include_router(like_route)
 app.include_router(subscription_route)
 app.include_router(chat_route)
 app.include_router(news_route)
+app.include_router(admin_route)
