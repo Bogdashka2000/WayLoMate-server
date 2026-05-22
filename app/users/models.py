@@ -33,6 +33,8 @@ class User(Base):
     comments = relationship("Comment", back_populates="user", cascade="all, delete-orphan")
     likes = relationship("Like", back_populates="user", cascade="all, delete-orphan")
     news = relationship("News", back_populates="user", cascade="all, delete-orphan")
+    hotels = relationship("Hotel", back_populates="user", cascade="all, delete-orphan")
+    places = relationship("Place", back_populates="user", cascade="all, delete-orphan")
 
     subscriptions_made: Mapped[list["Subscription"]] = relationship(
         "Subscription", 

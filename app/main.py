@@ -13,21 +13,24 @@ from app.subscriptions.route import router as subscription_route
 from app.chat.route import router as chat_route
 from app.news.route import router as news_route
 from app.admin.route import router as admin_route
+from app.hotels.route import router as hotels_router
+from app.places.route import router as places_router
 
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-
-
 STATIC_DIR_AVATAR = "app/static/avatar_images"
 STATIC_DIR_HEADER = "app/static/header_images"
 STATIC_DIR_POST_PICTURES = "app/static/post_pictures"
+STATIC_DIR_HOTELS = "app/static/uploads/hotels"
+STATIC_DIR_PLACES = "app/static/uploads/places"
 
 os.makedirs(STATIC_DIR_AVATAR, exist_ok=True)
 os.makedirs(STATIC_DIR_HEADER, exist_ok=True)
 os.makedirs(STATIC_DIR_POST_PICTURES, exist_ok=True)
-
+os.makedirs(STATIC_DIR_HOTELS, exist_ok=True)
+os.makedirs(STATIC_DIR_PLACES, exist_ok=True)
 
 app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
@@ -46,3 +49,5 @@ app.include_router(subscription_route)
 app.include_router(chat_route)
 app.include_router(news_route)
 app.include_router(admin_route)
+app.include_router(hotels_router)
+app.include_router(places_router)
